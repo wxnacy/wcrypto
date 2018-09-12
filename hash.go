@@ -6,6 +6,7 @@ import (
     "crypto/sha1"
     "crypto/sha256"
     "crypto/sha512"
+    "crypto/hmac"
     "errors"
     "os"
     "io"
@@ -17,6 +18,8 @@ const (
     SHA1 = "sha1"
     SHA256 = "sha256"
     SHA512 = "sha512"
+    HMACMD5 = "hmacmd5"
+    HMACSHA1 = "hmacsha1"
 )
 
 func HashFile(mode string, f *os.File) (string, error) {
@@ -76,5 +79,29 @@ func Hash(mode, msg string) (string, error) {
         }
     }
     io.WriteString(h, msg)
+    return fmt.Sprintf("%x", h.Sum(nil)), nil
+}
+
+func HmacHash(mode, key, msg string) (string, error) {
+
+    var h hash.Hash
+    switch mode {
+        case HMACMD5: {
+            h = hmac.New(md5.New, []byte(key))
+        }
+        case HMACSHA1: {
+            h = sha1.New()
+        }
+        case SHA256: {
+            h = sha256.New()
+        }
+        case SHA512: {
+            h = sha512.New()
+        }
+        default: {
+            return "", errors.New(mode + ": This mode is not supported")
+        }
+    }
+    h.Write([]byte(msg))
     return fmt.Sprintf("%x", h.Sum(nil)), nil
 }

@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+
+go install github.com/wxnacy/wcrypto/cmd/wcrypto
+cp ${GOPATH}/bin/wcrypto bin/
+
+echo 'Install Finshed'

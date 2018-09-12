@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+
+BIN="go run cmd/wcrypto/main.go"
+MSG="wxnacy"
+FILE="LICENSE"
+
+if [ $1 ]
+then
+    BIN=$1
+fi
+
+# echo $BIN
+
+echo '测试开始'
+
+for i in md5 sha1 sha256 sha512
+do
+    # 加密字符串
+    str_res=`$BIN $i $MSG`
+    file_res=`$BIN $i $FILE`
+    pipe_file_res=`cat $FILE | $BIN $i`
+    # echo $str_res, $file_res
+    # echo $file_res
+    case $i in
+        "md5")
+            test "$str_res" = "1f806eb48b670c40af49a3f764ba086f $MSG" \
+                &&  echo -n "." || echo "ERROR: $str_res"
+            test "$file_res" = "06214ba9fecad17362f12ab37e720767 $FILE" \
+                &&  echo -n "." || echo "ERROR: $file_res"
+            test "$pipe_file_res" = "06214ba9fecad17362f12ab37e720767" \
+                &&  echo -n "." || echo "ERROR: ${pipe_file_res}"
+        ;;
+        "sha1")
+            test "$str_res" = "ae80552bbe355867a1579ab25dfb3a49ac5ffae5 $MSG" \
+                &&  echo -n "." || echo "ERROR: $str_res"
+            test "$file_res" = "f9acfd6120ae751a6bcbfce5c74317cc85691e19 $FILE" \
+                &&  echo -n "." || echo "ERROR: $file_res"
+            test "$pipe_file_res" = "f9acfd6120ae751a6bcbfce5c74317cc85691e19" \
+                &&  echo -n "." || echo "ERROR: $pipe_file_res"
+        ;;
+        "sha256")
+            test "$str_res" = "e272638378933bcd0921396695cc357a5f8ed7c136d06878d0b9c9ae0302c14a $MSG" \
+                &&  echo -n "." || echo "ERROR: $str_res"
+            test "$file_res" = "53ade92cf56ebdd6c5c2751c620c3a4302363c82c0c1eb66999f3df316262b0b $FILE" \
+                &&  echo -n "." || echo "ERROR: $file_res"
+            test "$pipe_file_res" = "53ade92cf56ebdd6c5c2751c620c3a4302363c82c0c1eb66999f3df316262b0b" \
+                &&  echo -n "." || echo "ERROR: $pipe_file_res"
+        ;;
+        "sha512")
+            test "$str_res" = "edc44730889e61c7674c6f80c550a865d222ac9214cbb310e61303c5b1fc6bc3ea801a95a3dc2070d2c90aa7a5cae53bbc417b0c10be2e0d33d41d6a68cbf822 $MSG" \
+                &&  echo -n "." || echo "ERROR: $str_res"
+            test "$file_res" = "e6907fce8f15c4157101932485af674f6e9b416f9b7d28e4769748313fff53d8d416847013c62c4a40c51f894184fb02d1b971515f5a1a12e9b82b5cec1c52bf $FILE" \
+                &&  echo -n "." || echo "ERROR: $file_res"
+            test "$pipe_file_res" = "e6907fce8f15c4157101932485af674f6e9b416f9b7d28e4769748313fff53d8d416847013c62c4a40c51f894184fb02d1b971515f5a1a12e9b82b5cec1c52bf" \
+                &&  echo -n "." || echo "ERROR: $pipe_file_res"
+        ;;
+    esac
+done
+
+echo ''
+echo '测试完成'
