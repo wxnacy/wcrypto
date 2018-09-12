@@ -9,7 +9,7 @@ import (
 )
 
 const HELP  = `
-Version: 0.2.0
+Version: 0.2.1
 
 Uage:
     wcrypto <md5|sha1|sha256|sha512> <string|file>

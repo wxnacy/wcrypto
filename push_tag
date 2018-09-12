@@ -5,6 +5,7 @@ PUSH_MSG=${@/$1/}
 
 main(){
     git pull origin master
+    ./install
     git add .
     git commit -m "${PUSH_MSG}"
     git push origin master
