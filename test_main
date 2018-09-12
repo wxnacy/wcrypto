@@ -2,6 +2,7 @@
 
 BIN="go run cmd/wcrypto/main.go"
 MSG="wxnacy"
+KEY="wxnacy"
 FILE="LICENSE"
 
 if [ $1 ]
@@ -52,6 +53,50 @@ do
             test "$file_res" = "e6907fce8f15c4157101932485af674f6e9b416f9b7d28e4769748313fff53d8d416847013c62c4a40c51f894184fb02d1b971515f5a1a12e9b82b5cec1c52bf $FILE" \
                 &&  echo -n "." || echo "ERROR: $file_res"
             test "$pipe_file_res" = "e6907fce8f15c4157101932485af674f6e9b416f9b7d28e4769748313fff53d8d416847013c62c4a40c51f894184fb02d1b971515f5a1a12e9b82b5cec1c52bf" \
+                &&  echo -n "." || echo "ERROR: $pipe_file_res"
+        ;;
+    esac
+done
+
+for i in hmacmd5 hmacsha1 hmacsha256 hmacsha512
+do
+    # 加密字符串
+    str_res=`$BIN -k $KEY $i $MSG`
+    file_res=`$BIN -k $KEY $i $FILE`
+    pipe_file_res=`cat $FILE | $BIN -k $KEY $i`
+    # echo $str_res, $file_res
+    # echo $file_res
+    case $i in
+        "hmacmd5")
+            test "$str_res" = "84b12d9307fa423d41ae9719efc60ef3 $MSG" \
+                &&  echo -n "." || echo "ERROR: $str_res"
+            test "$file_res" = "dba911e58c46a0d0d5fbd0aedae53e84 $FILE" \
+                &&  echo -n "." || echo "ERROR: $file_res"
+            test "$pipe_file_res" = "dba911e58c46a0d0d5fbd0aedae53e84" \
+                &&  echo -n "." || echo "ERROR: ${pipe_file_res}"
+        ;;
+        "hmacsha1")
+            test "$str_res" = "852c1f85f3fd1b4f9eb0f60647d3026773500896 $MSG" \
+                &&  echo -n "." || echo "ERROR: $str_res"
+            test "$file_res" = "2592a92293cf2c7f71f51316bc885ab39dd9ffd1 $FILE" \
+                &&  echo -n "." || echo "ERROR: $file_res"
+            test "$pipe_file_res" = "2592a92293cf2c7f71f51316bc885ab39dd9ffd1" \
+                &&  echo -n "." || echo "ERROR: $pipe_file_res"
+        ;;
+        "hmacsha256")
+            test "$str_res" = "29e86b1e142731d6b69029a074ba1d8b8d37cd62f6f2d25a74409a3a27e90e1c $MSG" \
+                &&  echo -n "." || echo "ERROR: $str_res"
+            test "$file_res" = "59f9300493f76e195f1cae8e5392036d5c2f2b4fd8b898ac065dcea56657400b $FILE" \
+                &&  echo -n "." || echo "ERROR: $file_res"
+            test "$pipe_file_res" = "59f9300493f76e195f1cae8e5392036d5c2f2b4fd8b898ac065dcea56657400b" \
+                &&  echo -n "." || echo "ERROR: $pipe_file_res"
+        ;;
+        "hmacsha512")
+            test "$str_res" = "b8dfd4f067a0b3697720032dd735dd1110f93ec87a351918629a533f9c81b8f30378934b287d4aca668df4a0edb270a962b745eaf85029f860bca8e2ca4abfca $MSG" \
+                &&  echo -n "." || echo "ERROR: $str_res"
+            test "$file_res" = "61ea51fdd2c33692e56f271506bf0c8c56b6e46fd66346bd0459928d92741393d6f94364264ff9d3750399cb4812df5323ff6ee1aef59ca3bab840e9cf134ce0 $FILE" \
+                &&  echo -n "." || echo "ERROR: $file_res"
+            test "$pipe_file_res" = "61ea51fdd2c33692e56f271506bf0c8c56b6e46fd66346bd0459928d92741393d6f94364264ff9d3750399cb4812df5323ff6ee1aef59ca3bab840e9cf134ce0" \
                 &&  echo -n "." || echo "ERROR: $pipe_file_res"
         ;;
     esac

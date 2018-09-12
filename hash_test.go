@@ -81,3 +81,46 @@ func TestHash(t *testing.T) {
         }
     }
 }
+
+func TestHmacHash(t *testing.T) {
+
+    modes := []string{HMACMD5, HMACSHA1, HMACSHA256, HMACSHA512}
+
+    for _, d := range modes {
+
+        h, err := HmacHash(d, "wxnacy", "wxnacy")
+        if err != nil {
+            t.Error(err)
+        }
+
+        flag := false
+
+
+
+        switch d {
+            case  HMACMD5: {
+                if h != "84b12d9307fa423d41ae9719efc60ef3" {
+                    flag = true
+                }
+            }
+            case  HMACSHA1: {
+                if h != "852c1f85f3fd1b4f9eb0f60647d3026773500896" {
+                    flag = true
+                }
+            }
+            case  HMACSHA256: {
+                if h != "29e86b1e142731d6b69029a074ba1d8b8d37cd62f6f2d25a74409a3a27e90e1c" {
+                    flag = true
+                }
+            }
+            case  HMACSHA512: {
+                if h != "b8dfd4f067a0b3697720032dd735dd1110f93ec87a351918629a533f9c81b8f30378934b287d4aca668df4a0edb270a962b745eaf85029f860bca8e2ca4abfca" {
+                    flag = true
+                }
+            }
+        }
+        if flag {
+            t.Errorf("%s %s 结果不正确", d, h)
+        }
+    }
+}
