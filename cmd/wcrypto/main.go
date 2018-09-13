@@ -8,8 +8,10 @@ import (
     "strings"
 )
 
-const HELP  = `
-Version: 0.2.1
+const VERSION = "0.2.2"
+
+var HELP  = fmt.Sprintf(`
+Version: %s
 
 Uage:
     wcrypto <md5|sha1|sha256|sha512> <string|file>
@@ -22,7 +24,7 @@ Uage:
 Or use pipeline, Like
 
 cat file | wcrypto <md5|sha1|sha256|sha512>
-`
+`, VERSION)
 
 func HasStdin() (*os.File, bool) {
     fileInfo, _ := os.Stdin.Stat()
@@ -97,9 +99,13 @@ var Args = make([]string, 0)
 var Mode string             // 加密模式
 var Key string              // 秘钥
 var ModeType string         // 加密类型
+var Ver bool                // 查看简单版本信息
+var Version bool            // 查看版本信息
 
 func InitArgs() bool {
     flag.StringVar(&Key, "k", "", "Security key")
+    flag.BoolVar(&Ver, "v", false, "Security key")
+    flag.BoolVar(&Version, "V", false, "Security key")
 
     flag.Parse()
     // fmt.Println(Key)
@@ -113,6 +119,17 @@ func InitArgs() bool {
 }
 
 func CheckArgs() bool{
+
+    if Ver {
+        fmt.Println(VERSION)
+        return false
+    }
+
+    if Version {
+        fmt.Println(HELP)
+        return false
+    }
+
     argsNeedCount := 2
     if IsStdin {
         argsNeedCount = 1

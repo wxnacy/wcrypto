@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
-
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go install github.com/wxnacy/wcrypto/cmd/wcrypto
+# CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go install github.com/wxnacy/wcrypto/cmd/wcrypto
+CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go install github.com/wxnacy/wcrypto/cmd/wcrypto
 go install github.com/wxnacy/wcrypto/cmd/wcrypto
-cp ${GOPATH}/bin/wcrypto bin/
+
+cp ${GOPATH}/bin/linux_amd64/wcrypto bin/linux_amd64
+cp ${GOPATH}/bin/windows_amd64/wcrypto.exe bin/windows_amd64
+cp ${GOPATH}/bin/wcrypto bin/darwin_amd64
 
 echo 'Install Finshed'
