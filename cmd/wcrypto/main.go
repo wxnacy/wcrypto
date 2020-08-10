@@ -20,7 +20,6 @@ Uage:
 
     wcrypto -k <key> <hmacmd5|hmacsha1|hmacsha256|hmacsha512> <string|file>
 
-
 Or use pipeline, Like
 
 cat file | wcrypto <md5|sha1|sha256|sha512>
